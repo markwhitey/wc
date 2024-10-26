@@ -38,7 +38,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push: true
         provenance: false
-        platforms: linux/amd64
+        platforms: linux/amd64, linux/arm64
         tags: |
           ghcr.io/${{ github.repository }}/wechotd
           ${{ secrets.ALIYUN_REGISTRY_REPOSITORY }}
