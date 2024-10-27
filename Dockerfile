@@ -19,7 +19,6 @@ RUN ARCH="$(echo $TARGETARCH | sed -e 's/amd64/x86_64/;s/arm64/aarch64/')" \
     && /usr/local/mysql/bin/mysqld --initialize
 
 COPY ./supervisord.d/ /etc/supervisor/conf.d/
-WORKDIR /root
 
 RUN mkdir -p /root/temp/download
 COPY --from=registry.cn-hangzhou.aliyuncs.com/gewe/gewe /etc/nginx/nginx.conf /etc/nginx/nginx.conf
@@ -30,5 +29,11 @@ RUN rename.ul .ini .conf /etc/supervisor/conf.d/* \
   && chown -R root:root /usr/local/mysql/data \
   && rm -f /usr/local/mysql/data/\#innodb_redo/*
 
+FROM scratch
+
+COPY --from=0 / /
+WORKDIR /root
+
+EXPOSE 2531/tcp 2532/tcp
 CMD ["/bin/supervisord", "-n"]
 
