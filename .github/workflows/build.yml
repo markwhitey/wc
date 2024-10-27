@@ -12,10 +12,20 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - branch: main
+          tag: latest
+        - branch: alpine
+          tag: alpine
+
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        ref: ${{ matrix.branch }}
 
     - uses: docker/setup-buildx-action@v3.6.1
 
@@ -40,8 +50,8 @@ jobs:
         provenance: false
         platforms: linux/amd64, linux/arm64
         tags: |
-          ghcr.io/${{ github.repository }}/wechotd
-          ${{ secrets.ALIYUN_REGISTRY_REPOSITORY }}
+          ghcr.io/${{ github.repository }}/wechotd:${{ matrix.tag }}
+          ${{ secrets.ALIYUN_REGISTRY_REPOSITORY }}:${{ matrix.tag }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
