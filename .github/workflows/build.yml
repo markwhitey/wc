@@ -2,8 +2,6 @@ name: Build wechotd image
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 
 permissions:
   packages: write
@@ -18,8 +16,6 @@ jobs:
         include:
         - branch: main
           tag: latest
-        - branch: alpine
-          tag: alpine
 
     steps:
     - uses: actions/checkout@v3
